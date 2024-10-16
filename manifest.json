@@ -20,12 +20,14 @@
     {
       "matches": [
         "*://*.atlassian.net/*",
-        "*://*.atlassian.com/*"
+        "*://*.atlassian.com/*",
+        "*://*.bitbucket.org/*"
       ],
       "js": [
         "scripts/storage-utils.js",
         "scripts/settings.js",
-        "scripts/copybtn.js"
+        "scripts/copybtn.js",
+        "scripts/checkbox.js"
       ],
       "run_at": "document_start",
       "css": [
