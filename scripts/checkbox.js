@@ -8,10 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // when user clicks merge button, find checkbox and click it to enable "transition issue"
   setTimeout(function() {
-    document.querySelector("button[data-testid='mergeButton-primary']").onclick = function() {
+    const mergeButton = document.querySelector("button[data-testid='mergeButton-primary']");
+    if (!mergeButton) {
+      return;
+    }
+    mergeButton.onclick = function() {
       setTimeout(function() {
-        if (!document.querySelector("input[type='checkbox']").checked) {
-          document.querySelector("input[type='checkbox']").click()
+        const checkbox = document.querySelector("input[type='checkbox']");
+        if (checkbox && !checkbox.checked) {
+          checkbox.click();
         }
       }, 500);
     };

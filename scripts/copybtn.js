@@ -75,7 +75,12 @@ function createButtonCopyBranchNameGetIssueDataAndWriteToClipboard(issueId) {
         .replace(/\([\s\S]*?\)/g, '')
         .replace(/[^a-zA-Z ]/g, '')
         .toLowerCase()
-        .replace(/[-_\s.]+(.)?/g, (_, c) => c ? c.toUpperCase() : '');
+        // remove iOS prefix
+        .replace(/^(ios/android|android/ios|ios|android|webui|web|backend|frontend|api|db|infra|devops|qa|ux|ui)[-_\s.]*/i, '')
+        .replace(/[-_\s.]+(.)?/g, (_, c) => c ? c.toUpperCase() : '')
+        .replace(/^(.)/, (match) => match.toUpperCase());
+
+        console.log(specialBranchName);
 
       const format = '{key}-{specialBranchName}';
       const outputText = format
@@ -124,8 +129,33 @@ function createButtonCopyBranchName(parent) {
   };
 }
 
+// Button to create useful branch name (short version)
+// Template is hardcoded: {key}
+// Example: AB-12344
+function createButtonCopyBranchNameShort(parent) {
+  const buttonText = '📋 Ticket #';
+  const button = document.createElement("button");
+  button.textContent = buttonText;
+  button.id = "createButtonCopyBranchNameShort";
+  button.className = "CopyBtnForJira";
+  parent.appendChild(button);
+
+  button.onclick = function() {
+    const issueId = getIssueId();
+    if (issueId == null) {
+      button.textContent = 'Error: No Issue id found!';
+    }
+    navigator.clipboard.writeText(issueId);
+    // createButtonCopyBranchNameGetIssueDataAndWriteToClipboard(issueId);
+    button.textContent = '✅';
+    setTimeout(function() {
+      button.textContent = buttonText;
+    }, 2000);
+  };
+}
+
 function createButton(parent) {
-  const buttonText = '📋 Jira';
+  const buttonText = '📋 Jira Number and Title';
   const button = document.createElement("button");
   button.textContent = buttonText;
   button.id = "CopyBtnJiraId";
@@ -146,12 +176,19 @@ function createButton(parent) {
 }
 
 var observer = new MutationObserver(function (mutations, me) {
-  var parent = document.getElementsByClassName('gn0msi-0 cqZBrb')[0] ??
+  var parent = document.getElementsByClassName('_1e0c1txw _1n261g80 _ca0q166d _n3tdn7od _19bv1ltz _u5f31ltz _8mocu2gc')[0] ?? // RF 2025-05-13
+               document.getElementsByClassName('gn0msi-0 cqZBrb')[0] ??
                document.getElementsByClassName('_otyr1y44 _ca0q1y44 _u5f3idpf _n3td1y44 _19bvidpf _1e0c116y')[0] ??
-               document.getElementsByClassName('_otyr1b66 _1yt4swc3 _1e0c116y')[0];
+               document.getElementsByClassName('_otyr1b66 _1yt4swc3 _1e0c116y')[0] ??
+               document.getElementsByClassName('_1bah1kw7')[0] ?? // RF 2026-02-18: fix broken selector once again
+               document.querySelectorAll("[data-testid='issue-view-layout-templates-default.ui.foundation-content.foundation-content-wrapper']")[0];
   if (parent) {
     if (!document.getElementById('createButtonCopyBranchName')) {
       createButtonCopyBranchName(parent);
+    }
+
+    if (!document.getElementById('createButtonCopyBranchNameShort')) {
+      createButtonCopyBranchNameShort(parent);
     }
 
     if (!document.getElementById('CopyBtnJiraId')) {

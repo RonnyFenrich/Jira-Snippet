@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   storageGet('format').then(function (data) {
     if (data.format) {
-      document.getElementById('format').value = data.format;
+      // document.getElementById('format').value = data.format;
     }
   });
 });
