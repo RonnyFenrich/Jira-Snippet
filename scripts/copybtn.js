@@ -73,10 +73,10 @@ function createButtonCopyBranchNameGetIssueDataAndWriteToClipboard(issueId) {
       const issueUrl = `${window.location.origin}/browse/${issueId}`;
       const specialBranchName = issueTitle
         .replace(/\([\s\S]*?\)/g, '')
+        // strip a leading platform tag before non-alpha chars are removed
+        .replace(/^[\[\(]?\s*(ios\/android|android\/ios|ios|android|webui|web|backend|frontend|api|db|infra|devops|qa|ux|ui)\s*[\]\)]?[-_\s.:]*/i, '')
         .replace(/[^a-zA-Z ]/g, '')
         .toLowerCase()
-        // remove iOS prefix
-        .replace(/^(ios/android|android/ios|ios|android|webui|web|backend|frontend|api|db|infra|devops|qa|ux|ui)[-_\s.]*/i, '')
         .replace(/[-_\s.]+(.)?/g, (_, c) => c ? c.toUpperCase() : '')
         .replace(/^(.)/, (match) => match.toUpperCase());
 
