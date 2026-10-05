@@ -20,6 +20,13 @@
     background: rgb(7, 71, 166);
   }
 
+  #JiraSnippetButtons {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    margin: 4px 0 8px -10px;
+  }
+
   .center {
     display: block;
     margin-left: auto;

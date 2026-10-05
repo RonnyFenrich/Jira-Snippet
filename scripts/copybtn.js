@@ -175,13 +175,30 @@ function createButton(parent) {
   };
 }
 
+// Own container below the title; the title wrapper is a nowrap flex row that squeezes appended buttons.
+// Suffix match because Jira renamed the testid prefix (layout-templates -> product-templates) in 2026-10.
+function getButtonContainer() {
+  const titleWrapper = document.querySelector("[data-testid$='ui.foundation-content.foundation-content-wrapper']");
+  if (!titleWrapper) {
+    return null;
+  }
+
+  let container = document.getElementById('JiraSnippetButtons');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'JiraSnippetButtons';
+    titleWrapper.after(container);
+  }
+  return container;
+}
+
 var observer = new MutationObserver(function (mutations, me) {
   var parent = document.getElementsByClassName('_1e0c1txw _1n261g80 _ca0q166d _n3tdn7od _19bv1ltz _u5f31ltz _8mocu2gc')[0] ?? // RF 2025-05-13
                document.getElementsByClassName('gn0msi-0 cqZBrb')[0] ??
                document.getElementsByClassName('_otyr1y44 _ca0q1y44 _u5f3idpf _n3td1y44 _19bvidpf _1e0c116y')[0] ??
                document.getElementsByClassName('_otyr1b66 _1yt4swc3 _1e0c116y')[0] ??
                document.getElementsByClassName('_1bah1kw7')[0] ?? // RF 2026-02-18: fix broken selector once again
-               document.querySelectorAll("[data-testid='issue-view-layout-templates-default.ui.foundation-content.foundation-content-wrapper']")[0];
+               getButtonContainer();
   if (parent) {
     if (!document.getElementById('createButtonCopyBranchName')) {
       createButtonCopyBranchName(parent);
